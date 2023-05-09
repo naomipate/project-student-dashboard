@@ -8,7 +8,6 @@ Here is our main "App" function that will the Parent of all our components and f
 */
 function App() {
   let [cohortPrompt, setCohortPrompt] = useState("All Students");
-
   /* 
         Creating a new spread array of the cohortCodes from studentData.
         */

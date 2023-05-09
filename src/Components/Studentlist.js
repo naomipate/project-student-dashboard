@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 
 function Studentlist({ cohorts, cohortCode }) {
   let cohort = cohorts.filter((cohortObj) => cohortObj.code === cohortCode)[0];
+  const showMore = true;
+  let [showMoreBtn, setShowMoreBtn] = useState(false);
 
   function handleTrackToGraduate(studentDataObj) {
     let onTrack = true;
@@ -16,6 +18,16 @@ function Studentlist({ cohorts, cohortCode }) {
       return "On Track to Graduate";
     }
   }
+
+  function getShowMoreText() {
+    if (showMoreBtn) {
+      return "Show Less...";
+    } else {
+      return "Show More...";
+    }
+  }
+
+  function handleAdditionalStudentDetails() {}
 
   return (
     <div>
@@ -39,7 +51,14 @@ function Studentlist({ cohorts, cohortCode }) {
                   dateStyle: "long",
                 }).format(new Date(studentDataObj.dob))}
             </p>
-            <button>Show More...</button>
+            <div>
+              {" "}
+              <button onClick={() => setShowMoreBtn(!showMoreBtn)}>
+                {getShowMoreText()}
+              </button>
+            </div>
+            {showMoreBtn && <div>LOOK AT ME</div>}
+
             <h3>{handleTrackToGraduate(studentDataObj)}</h3>
           </div>
         );

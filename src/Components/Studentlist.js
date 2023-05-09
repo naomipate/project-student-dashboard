@@ -1,14 +1,15 @@
 import React from "react";
-import studentData from "../data/data.json";
 
-function Studentlist() {
+function Studentlist({ cohorts, cohortCode }) {
+  let cohort = cohorts.filter((cohortObj) => cohortObj.code === cohortCode)[0];
   return (
     <div>
-      {studentData.map((studentDataObj) => {
+      <h2>{cohort.code}</h2>
+      <p>Total Students: {cohort.studentData.length}</p>
+      {cohort.studentData.map((studentDataObj) => {
         return (
-          <>
-            <h2>All Students</h2>
-            <p>Total Students: {studentData.length}</p>
+          <div key={studentDataObj.id}>
+            <img src={studentDataObj.profilePhoto} alt="Student Profile" />
             <h4>
               {studentDataObj.names.preferredName +
                 " " +
@@ -17,8 +18,8 @@ function Studentlist() {
                 studentDataObj.names.surname}
             </h4>
             <p>{studentDataObj.username}</p>
-            <img src={studentDataObj.profilePhoto} alt="Profile of student" />
-          </>
+            <p>{studentDataObj.dob}</p>
+          </div>
         );
       })}
     </div>

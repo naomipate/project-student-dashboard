@@ -1,56 +1,70 @@
 import React, { useState } from "react";
-// import Studentlist from "./Components/Studentlist";
+import Studentlist from "./Components/Studentlist";
+import Cohortlist from "./Components/Cohortlist";
 import studentData from "./data/data.json";
 
-function Cohortlist() {
-  function handleCohortList() {
-    let cohortCodes = [
-      ...new Set(studentData.map((studentObj) => studentObj.cohort.cohortCode)),
-    ];
-    let cohorts = [];
-    cohortCodes.forEach((code) => {
-      let cohortStudents = studentData.filter((student) => {
-        return student.cohort.cohortCode === code;
-      });
-      let cohortDate = new Date(cohortStudents[0].cohort.cohortStartDate);
-      cohorts.push({
-        code: code,
-        studentData: cohortStudents,
-        cohortBegins: cohortDate,
-      });
-    });
+/*
+Here is our main "App" function that will the Parent of all our components and functions.
+*/
+function App() {
+  let [cohortPrompt, setCohortPrompt] = useState("All Students");
 
-    cohorts.sort((a, b) => a.cohortBegins - b.cohortBegins);
-    console.log(cohorts);
-
-    return cohorts.map((cohort) => {
-      return (
-        <li>
-          <a href="#">{cohort.code.replace(/([a-zA-Z]*)(\d*)/g, "$1 $2")}</a>
-        </li>
-      );
+  /* 
+        Creating a new spread array of the cohortCodes from studentData.
+        */
+  let cohortCodes = [
+    ...new Set(studentData.map((studentObj) => studentObj.cohort.cohortCode)),
+  ];
+  /* 
+        Below I am making an empty array to store the objects holding the filtered cohortCodes, 
+        the matching studentData, and the matching dates the cohorts begin for sorting purposes.
+        */
+  let cohorts = [];
+  cohortCodes.forEach((code) => {
+    let cohortStudents = studentData.filter((student) => {
+      return student.cohort.cohortCode === code;
     });
+    let cohortDate = new Date(cohortStudents[0].cohort.cohortStartDate);
+    cohorts.push({
+      code: code.replace(/([a-zA-Z]*)(\d*)/g, "$1 $2"),
+      studentData: cohortStudents,
+      cohortBegins: cohortDate,
+    });
+  });
+
+  /*
+        sorting the cohort dates so ensure the cohort list returns in a date sorted format.
+        */
+  cohorts.sort((a, b) => a.cohortBegins - b.cohortBegins);
+  cohorts = [
+    { code: "All Students", studentData: studentData, cohortBegins: null },
+    ...cohorts,
+  ];
+
+  function handleCohortCode(cohortCode) {
+    setCohortPrompt(cohortCode);
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
   }
 
   return (
-    <>
-      <h3>Choose a Class by Start Date</h3>
-      <ul>
-        <li>
-          <a href="./App.js">All Students</a>
-        </li>
-        {handleCohortList(studentData)}
-      </ul>
-    </>
-  );
-}
-
-function App() {
-  return (
-    <div>
+    <div onSubmit={handleSubmit}>
       <h1>Student Dashboard</h1>
-      <div>{/* <Studentlist /> */}</div>
-      <div>{Cohortlist(studentData)}</div>
+      <div className="container">
+        <div className="col-1">
+          <h3>Choose a Class by Start Date</h3>
+          <Cohortlist
+            className="cohort-list"
+            cohorts={cohorts}
+            handleCohortCode={handleCohortCode}
+          />
+        </div>
+        <div className="col-2">
+          <Studentlist cohorts={cohorts} cohortCode={cohortPrompt} />
+        </div>
+      </div>
     </div>
   );
 }

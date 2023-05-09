@@ -50,18 +50,14 @@ function App() {
   }
 
   return (
-    <div onSubmit={handleSubmit}>
+    <div className="container" onSubmit={handleSubmit}>
       <h1>Student Dashboard</h1>
-      <div className="container">
-        <div className="col-1">
-          <h3>Choose a Class by Start Date</h3>
-          <Cohortlist
-            className="cohort-list"
-            cohorts={cohorts}
-            handleCohortCode={handleCohortCode}
-          />
-        </div>
+      <div className="row">
         <div className="col-2">
+          <h3>Choose a Class by Start Date</h3>
+          <Cohortlist cohorts={cohorts} handleCohortCode={handleCohortCode} />
+        </div>
+        <div className="col-6">
           <Studentlist cohorts={cohorts} cohortCode={cohortPrompt} />
         </div>
       </div>

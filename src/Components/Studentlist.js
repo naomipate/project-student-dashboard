@@ -2,7 +2,6 @@ import React, { useState } from "react";
 
 function Studentlist({ cohorts, cohortCode }) {
   let cohort = cohorts.filter((cohortObj) => cohortObj.code === cohortCode)[0];
-  const showMore = true;
   let [showMoreBtn, setShowMoreBtn] = useState({});
 
   function handleTrackToGraduate(studentDataObj) {
